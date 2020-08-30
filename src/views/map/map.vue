@@ -13,78 +13,81 @@
         class="position-absolute px-20 cursor-pointer indicator"
         v-for="(item, index) in indicatorList"
         :key="'indicatorList' + index"
-        :style="{left: (index + 1) * 10 + '%', top: (index + 1) * 10 + '%'}"
-        @click="handleRenderVideoBox"
+        :style="{left: item.left, top: item.top}"
+        @click="handleRenderVideoBox(item)"
       >{{item.title + (index + 1)}}</div>
     </div>
 
     <!-- 模块：头部logo -->
-    <div class="d-flex align-items-center header-bar-modules">
+    <div class="position-relative z100 d-flex align-items-center header-bar-modules">
       <div class="logo-icon">
         <imgWithLoading :src="require('@/assets/icon/com-logo.png')"></imgWithLoading>
       </div>
-      <div class="title">三维可视化学执勤系统</div>
+      <div class="title">三维可视化执勤系统</div>
     </div>
 
     <!-- 模块：侧边的导航栏 -->
     <div class="side-nav-modules">
-      <div class="nav-item" v-for="(item, index) in 8" :key="index">
+      <div class="cursor-pointer nav-item" v-for="(item, index) in 8" :key="index">
         <imgWithLoading :src="require('@/assets/icon/map-icon-'+ (index + 1) +'.png')"></imgWithLoading>
       </div>
     </div>
 
     <!-- 模块：视频 -->
-    <div
-      class="position-fixed video-modules"
-      ref="videoModules"
-      v-if="videoObj.isRender === true"
-      :style="{left: videoObj.position.left + 'px', top: videoObj.position.top + 'px'}"
-      @mousedown="controlPositionMethods.onMouseDown"
+
+    <transition
+      enter-active-class="animated faster fadeIn"
+      leave-active-class="animated faster fadeOut"
     >
-      <div class="position-relative video-box">
-        <!-- 背景图 -->
-        <imgWithLoading
-          class="position-absolute"
-          style="z-index: -1;"
-          :src="require('@/assets/img/map-video-bg.png')"
-        ></imgWithLoading>
+      <div
+        class="position-fixed z200 video-modules"
+        ref="videoModules"
+        v-if="videoObj.isRender === true"
+        :style="{left: videoObj.position.left + 'px', top: videoObj.position.top + 'px'}"
+        @mousedown="controlPositionMethods.onMouseDown"
+      >
+        <div class="position-relative video-box">
+          <!-- 背景图 -->
+          <imgWithLoading
+            class="position-absolute"
+            style="z-index: -1;"
+            :src="require('@/assets/img/map-video-bg.png')"
+          ></imgWithLoading>
 
-        <!-- 标题栏 -->
-        <div class="position-absolute d-flex align-items-center title-bar">
-          <div class="col title">标题</div>
-          <div
-            class="d-flex align-items-center cursor-pointer close-box"
-            @click="handleCloseVideoBox"
-          >
-            <div class="close-icon"></div>
-            <div class="close-text">关闭</div>
+          <!-- 标题栏 -->
+          <div class="position-absolute d-flex align-items-center title-bar">
+            <div class="col title">{{videoObj.title}}</div>
+            <div
+              class="d-flex align-items-center cursor-pointer close-box"
+              @click="handleCloseVideoBox"
+            >
+              <div class="close-icon"></div>
+              <div class="close-text">关闭</div>
+            </div>
           </div>
-        </div>
 
-        <!-- 视频区 -->
-        <div class="position-absolute video-content">
-          <div class="position-relative w-100 h-100">
-            <!-- <div class="position-absolute play-btn">
+          <!-- 视频区 -->
+          <div class="position-absolute video-content">
+            <div class="position-relative w-100 h-100">
+              <!-- <div class="position-absolute play-btn">
               <imgWithLoading :src="require('@/assets/icon/map-icon-video.png')"></imgWithLoading>
-            </div>-->
-            <div class="position-absolute h-100 w-100">
-              <video
-                id="videoDom"
-                class="w-100 h-100 video-js vjs-default-skin vjs-big-play-centered"
-                controls
-                autoplay="muted"
-                preload="auto"
-              >
-                <source
-                  src="http://citaq.com/public/uploads/20200415/dream_video.mp4"
-                  type="video/mp4"
-                />
-              </video>
+              </div>-->
+              <div class="position-absolute h-100 w-100">
+                <video
+                  id="videoDom"
+                  class="w-100 h-100 video-js vjs-default-skin vjs-big-play-centered"
+                  controls
+                  autoplay="muted"
+                  preload="auto"
+                >
+                  <source :src="videoObj.src" type="video/mp4" />
+                </video>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -106,21 +109,39 @@ export default {
       indicatorList: [
         {
           title: "电子监控",
+          left: "20%",
+          top: "70%",
+          videoSrc: "http://wjps.ozkoalas.cn/video1.mp4",
         },
         {
           title: "电子监控",
+          left: "30%",
+          top: "60%",
+          videoSrc: "http://wjps.ozkoalas.cn/video2.mp4",
         },
         {
           title: "电子监控",
+          left: "40%",
+          top: "70%",
+          videoSrc: "http://wjps.ozkoalas.cn/video3.mp4",
         },
         {
           title: "电子监控",
+          left: "30%",
+          top: "40%",
+          videoSrc: "http://wjps.ozkoalas.cn/video4.mp4",
         },
         {
           title: "电子监控",
+          left: "50%",
+          top: "80%",
+          videoSrc: "http://wjps.ozkoalas.cn/video5.mp4",
         },
         {
           title: "电子监控",
+          left: "80%",
+          top: "30%",
+          videoSrc: "http://wjps.ozkoalas.cn/video6.mp4",
         },
       ],
     };
@@ -165,18 +186,6 @@ export default {
 
             // 播放视频
             const myPlayer = this.myPlayer;
-
-            if (myPlayer) {
-              myPlayer.src([
-                {
-                  type: "application/x-mpegURL",
-                  src:
-                    "http://citaq.com/public/uploads/20200415/dream_video.mp4",
-                },
-              ]);
-            } else {
-              this.myPlayer = this.initVideoPlayer(); //初始化视频播放器
-            }
           });
         },
         onMouseMove: ($event) => {
@@ -199,8 +208,19 @@ export default {
     },
 
     //渲染视频
-    handleRenderVideoBox() {
-      this.videoObj.isRender = true;
+    handleRenderVideoBox(details) {
+      this.videoObj.title = details.title;
+      this.videoObj.src = details.videoSrc;
+
+      this.$nextTick(() => {
+        this.videoObj.isRender = true;
+
+        this.$nextTick(() => {
+          if (!this.myPlayer) {
+            this.myPlayer = this.initVideoPlayer(); //初始化视频播放器
+          }
+        });
+      });
     },
 
     //关闭视频
@@ -212,8 +232,8 @@ export default {
     contentEvt_mouseMove($event) {
       const currentModel = this.currentModel;
 
-      console.info("currentModel", currentModel);
-      console.info("$event", $event);
+      // console.info("currentModel", currentModel);
+      // console.info("$event", $event);
 
       if (!currentModel) {
         return false;
@@ -267,6 +287,11 @@ export default {
       font-weight: bold;
       font-size: 0.94vw;
       color: #1111c4;
+      transition: all 0.2s;
+
+      &:hover {
+        transform: scale(1.2);
+      }
 
       &::before {
         position: absolute;
@@ -324,6 +349,11 @@ export default {
     background-color: #1e1813;
     border: solid 0.05vw #bbd2b5;
     border-radius: 50%;
+    transition: all 0.2s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 }
 

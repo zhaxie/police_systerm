@@ -51,13 +51,18 @@
 
                 <!-- 按钮 -->
                 <div class="d-flex flex-column h-100 btn-list">
-                  <div class="position-relative cursor-pointer btn-item" v-for="(item, index) in 4" :key="index">
+                  <div
+                    class="position-relative cursor-pointer btn-item"
+                    v-for="(item, index) in 4"
+                    :key="index"
+                    @click="$router.push({name: 'map'})"
+                  >
                     <!-- 主背景 -->
                     <div class="position-absolute bg"></div>
                     <!-- 背景四周的icon -->
                     <div class="position-absolute corner-icon top"></div>
                     <div class="position-absolute corner-icon bottom"></div>
-                    <div class="position-absolute btn-text">功能按钮名称</div>
+                    <div class="position-absolute text-over-one btn-text">可视化执勤系统</div>
                   </div>
                 </div>
               </div>
@@ -254,10 +259,10 @@ export default {
           height: 3vw;
           border: solid 0.05vw #138025;
           transition: all 0.2s;
-          
-          &:hover{
+
+          &:hover {
             transform: scale(1.05);
-          background-color: #138025;
+            background-color: #138025;
           }
 
           .bg {
